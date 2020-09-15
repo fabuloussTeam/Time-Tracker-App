@@ -18,9 +18,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot){
           if(snapshot.hasError){
             return Text("Something Went Wrong");
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
+          } else if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
@@ -31,7 +29,7 @@ class MyApp extends StatelessWidget {
             );
           }
 
-          return Text("Loanding App...");
+          return CircularProgressIndicator();
         },
     );
   }
