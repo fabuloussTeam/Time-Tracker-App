@@ -11,13 +11,18 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
 
-void _signInAnonymously() async {
-  final  authResult = await FirebaseAuth.instance.signInAnonymously();
-  print("${authResult.user.uid}");
+Future<void> _signInAnonymously() async {
+  try {
+    final  authResult = await FirebaseAuth.instance.signInAnonymously();
+    print("${authResult.user.uid}");
+  } catch (e) {
+    print("${e.toString()}");
+  }
+
 }
 
-  @override
-  Widget build(BuildContext context) {
+ @override
+ Widget build(BuildContext context) {
 
     Widget _buildContaint(){
       return Padding(
@@ -75,7 +80,6 @@ void _signInAnonymously() async {
       );
     }
 
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Time Tracker"),
@@ -87,6 +91,7 @@ void _signInAnonymously() async {
       ),
       backgroundColor: Colors.grey[200],
     );
+
   }
 
 }
