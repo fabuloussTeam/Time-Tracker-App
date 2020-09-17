@@ -8,7 +8,6 @@ import 'dart:async';
 class SignInPage extends StatelessWidget {
 
   final Function(User) onSignIn;
-
   SignInPage({@required this.onSignIn});
 
 
