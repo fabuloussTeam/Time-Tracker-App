@@ -18,12 +18,13 @@ class _LandingPageState extends State<LandingPage> {
     _checkCurrentUser();
   }
 
+  // Retrive the current user if connected
   Future<void> _checkCurrentUser() async {
     User user = await FirebaseAuth.instance.currentUser;
     _updateUser(user);
   }
 
-  // Update user from callbackfunction
+  // update user state to redirect forward SignIn page or Home Page
   void _updateUser(User user){
    setState(() {
      _user = user;
