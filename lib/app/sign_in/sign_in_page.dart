@@ -3,23 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/app/sign_in/sign_in_button.dart';
 import 'package:timetrackerapp/app/sign_in/socialSignInButton.dart';
+import 'dart:async';
 
-class SignInPage extends StatefulWidget {
-  @override
-  _SignInPageState createState() => _SignInPageState();
-}
+class SignInPage extends StatelessWidget {
 
-class _SignInPageState extends State<SignInPage> {
+  final Function(User) onSignIn;
 
-Future<void> _signInAnonymously() async {
-  try {
-    final  authResult = await FirebaseAuth.instance.signInAnonymously();
-    print("${authResult.user.uid}");
-  } catch (e) {
-    print("${e.toString()}");
+  SignInPage({@required this.onSignIn});
+
+
+  Future<void> _signInAnonymously() async {
+    try {
+      final  authResult = await FirebaseAuth.instance.signInAnonymously();
+      print("${authResult.user.uid}");
+       onSignIn(authResult.user);
+    } catch (e) {
+      print("${e.toString()}");
+    }
+
   }
-
-}
 
  @override
  Widget build(BuildContext context) {
