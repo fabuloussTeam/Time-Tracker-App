@@ -1,16 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/app/home_page.dart';
 import 'package:timetrackerapp/app/sign_in/sign_in_page.dart';
+import 'package:timetrackerapp/services/auth.dart';
 
 class LandingPage extends StatefulWidget {
+  final AuthBase auth;
+  LandingPage({this.auth});
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
 
-  User _user; // Come from firebase_auth
+  UserModel _user; // Come from firebase_auth
 
   @override
   void initState() {
@@ -20,12 +23,13 @@ class _LandingPageState extends State<LandingPage> {
 
   // Retrive the current user if connected
   Future<void> _checkCurrentUser() async {
-    User user =  FirebaseAuth.instance.currentUser;
-    _updateUser(user);
+    UserModel currUser = await widget.auth.currentUser();
+    // User user =  FirebaseAuth.instance.currentUser;
+    _updateUser(currUser);
   }
 
   // update user state to redirect forward SignIn page or Home Page
-  void _updateUser(User user){
+  void _updateUser(UserModel user){
    setState(() {
      _user = user;
    });
@@ -35,11 +39,13 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     if(_user == null){
       return SignInPage(
+        auth: widget.auth,
         onSignIn: _updateUser,
       );
     }
 
     return HomePage(
+      auth: widget.auth,
       onSignOut: () => _updateUser(null),
     );
   }

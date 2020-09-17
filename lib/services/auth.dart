@@ -2,15 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 // Model User
-class User {
+class UserModel {
   String uid;
-  User({@required this.uid});
+  UserModel({@required this.uid});
 }
 
 // Creation d'une abstrac class
 abstract class AuthBase {
-  Future<User> currentUser();
-  Future<User> signInAnonymously();
+  Future<UserModel> currentUser();
+  Future<UserModel> signInAnonymously();
   Future<void> signOut();
 }
 
@@ -20,23 +20,23 @@ class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
 
   // Le premier User est implementation du model
-  User _userFromFirebase(User user){
+  UserModel _userFromFirebase(User user){
     if(user == null){
       return null;
     }
-    return User(uid: user.uid);
+    return UserModel(uid: user.uid);
   }
 
 
-  Future<User> currentUser() async {
+  Future<UserModel> currentUser() async {
     final currentUser =   _firebaseAuth.currentUser;
-    return _userFromFirebase(currentUser as User);
+    return _userFromFirebase(currentUser);
   }
 
-  Future<User> signInAnonymously() async {
+  Future<UserModel> signInAnonymously() async {
     final authResult = await _firebaseAuth.signInAnonymously();
-    print(_userFromFirebase(authResult.user as User));
-    return _userFromFirebase(authResult.user as User);
+    print(_userFromFirebase(authResult.user).uid);
+    return _userFromFirebase(authResult.user);
   }
 
   Future<void> signOut() async {
