@@ -7,10 +7,17 @@ class User {
   User({@required this.uid});
 }
 
-class Auth {
+// Creation d'une abstrac class
+abstract class AuthBase {
+  Future<User> currentUser();
+  Future<User> signInAnonymously();
+  Future<void> signOut();
+}
+
+// Implementation de l'abstract class
+class Auth implements AuthBase {
 
   final _firebaseAuth = FirebaseAuth.instance;
-
 
   // Le premier User est implementation du model
   User _userFromFirebase(User user){
