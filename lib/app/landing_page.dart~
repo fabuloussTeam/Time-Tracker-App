@@ -7,8 +7,6 @@ class LandingPage extends StatelessWidget {
   final AuthBase auth;
   LandingPage({this.auth});
 
-  // On a retirer les call back function. On a StreamBuilder + onAuthStateChange pour changer de page
-  // Ici le state se met automatiquement a jour avec la function Stream onAuthStateChange dans auth.dart
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UserModel>(

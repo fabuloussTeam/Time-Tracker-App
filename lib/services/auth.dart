@@ -28,24 +28,27 @@ class Auth implements AuthBase {
     return UserModel(uid: user.uid);
   }
 
-  // Creation d'un stream: tuyau pour passer les données
+  // Creation d'un stream: pour le changement d'etat
   @override
   Stream<UserModel> get onAuthStateChange {
      return _firebaseAuth.authStateChanges().map(((user) => _userFromFirebase(user)));
   }
 
 
+  // Utilisateur courant
   Future<UserModel> currentUser() async {
     final currentUser =   _firebaseAuth.currentUser;
     return _userFromFirebase(currentUser);
   }
 
+  // Connection de connection de facon anonyme
   Future<UserModel> signInAnonymously() async {
     final authResult = await _firebaseAuth.signInAnonymously();
-    print(_userFromFirebase(authResult.user).uid);
+   // print(_userFromFirebase(authResult.user).uid);
     return _userFromFirebase(authResult.user);
   }
 
+  // Fonction de deconnectio
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
