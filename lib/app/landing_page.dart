@@ -13,7 +13,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
 
-  UserModel _user; // Come from firebase_auth
+  UserModel _user; // Come from UserMoodel class
 
   @override
   void initState() {

@@ -11,19 +11,18 @@ import 'package:timetrackerapp/services/auth.dart';
 class SignInPage extends StatelessWidget {
 
   final AuthBase auth;
-  final Function(UserModel) onSignIn;
+  final Function(UserModel) onSignIn; // Fonction callback
   SignInPage({@required this.auth, @required this.onSignIn});
 
 
   Future<void> _signInAnonymously() async {
     try {
-      UserModel user = await auth.signInAnonymously();
+       UserModel user = await auth.signInAnonymously();
     //  print("${authResult.user}");
        onSignIn(user);
     } catch (e) {
       print("${e.toString()}");
     }
-
   }
 
  @override

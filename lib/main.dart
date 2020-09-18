@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/app/landing_page.dart';
-import 'package:timetrackerapp/app/sign_in/sign_in_page.dart';
 import 'package:timetrackerapp/services/auth.dart';
 
 
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _initialization,
+        future: _initialization,
         builder: (context, snapshot){
           if(snapshot.hasError){
             return Text("Something Went Wrong");

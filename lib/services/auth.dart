@@ -27,6 +27,11 @@ class Auth implements AuthBase {
     return UserModel(uid: user.uid);
   }
 
+  // Creation d'un stream: tuyau pour passer les données
+  Stream<UserModel> get onAuthStateChange {
+     return _firebaseAuth.authStateChanges().map((_userFromFirebase));
+  }
+
 
   Future<UserModel> currentUser() async {
     final currentUser =   _firebaseAuth.currentUser;
