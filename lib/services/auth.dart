@@ -9,6 +9,7 @@ class UserModel {
 
 // Creation d'une abstrac class
 abstract class AuthBase {
+  Stream<UserModel> get onAuthStateChange;
   Future<UserModel> currentUser();
   Future<UserModel> signInAnonymously();
   Future<void> signOut();
@@ -28,8 +29,9 @@ class Auth implements AuthBase {
   }
 
   // Creation d'un stream: tuyau pour passer les données
+  @override
   Stream<UserModel> get onAuthStateChange {
-     return _firebaseAuth.authStateChanges().map((_userFromFirebase));
+     return _firebaseAuth.authStateChanges().map(((user) => _userFromFirebase(user)));
   }
 
 
