@@ -8,12 +8,14 @@ class EmailSignInPage extends StatelessWidget {
         title: Text("Sign In"),
         centerTitle: true,
       ),
-      body: _builContext(),
+      body: _builContext(context),
     );
   }
 
-  Widget _builContext() {
-    return Container();
+  Widget _builContext(BuildContext context) {
+    return Scaffold(
+
+    );
   }
 }
 
