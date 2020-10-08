@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/common_widgets/form_submit_button.dart';
 
+ final TextEditingController _emailController = TextEditingController();
+ final TextEditingController _passwordController = TextEditingController();
+
+ void _submit(){
+   print("email: ${_emailController.text} password: ${_passwordController.text}");
+ }
+
+
+
 List<Widget> _buildChildren(){
   return [
     TextField(
+      controller: _emailController,
       decoration: InputDecoration(
         labelText: 'Email',
         hintText: 'test@gmail.com',
@@ -11,15 +21,15 @@ List<Widget> _buildChildren(){
     ),
     SizedBox(height: 8.0,),
     TextField(
+      controller: _passwordController,
       decoration: InputDecoration(
         labelText: 'Password',
       ),
       obscureText: true,
     ),
     SizedBox(height: 8.0,),
-
       FormSubmitButton(
-        onPressed: (){},
+        onPressed: _submit,
         text: "Sign in",
     ),
     SizedBox(height: 8.0,),
