@@ -21,9 +21,17 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     print("email: ${_emailController.text} password: ${_passwordController.text}");
   }
 
+  void _toogleFormType(){
+    setState(() {
+      _formType = (_formType == EmailSignInFormType.signin) ? EmailSignInFormType.register : EmailSignInFormType.signin;
+    });
+    _emailController.clear();
+    _passwordController.clear();
+  }
+
   List<Widget> _buildChildren(){
     final primaryText = _formType == EmailSignInFormType.signin ? "Sign in" : "Create an account";
-    final secondaryText = _formType == EmailSignInFormType.signin ? "Need an account register" : "Have an account? Sign in";
+    final secondaryText = _formType == EmailSignInFormType.signin ? "Need an account? register" : "Have an account? Sign in";
     print(secondaryText);
     return [
       TextField(
@@ -48,7 +56,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
       SizedBox(height: 8.0,),
       FlatButton(
-        onPressed: (){},
+        onPressed: _toogleFormType,
         child: Text(secondaryText),
       )
     ];
