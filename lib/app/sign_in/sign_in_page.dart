@@ -6,6 +6,8 @@ import 'dart:async';
 
 import 'package:timetrackerapp/services/auth.dart';
 
+import 'email_sign_in_page.dart';
+
 
 
 class SignInPage extends StatelessWidget {
@@ -40,7 +42,12 @@ class SignInPage extends StatelessWidget {
   }
 
   void _signInWithEmail(BuildContext context){
-       
+     Navigator.of(context).push(
+       MaterialPageRoute<void>(
+           fullscreenDialog: true,
+           builder: (context) => EmailSignInPage(),
+       )
+     );
   }
 
  @override
