@@ -26,51 +26,59 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   String get _password => _passwordController.text;
 
   var _formType = EmailSignInFormType.signin;
-  bool submitted = false;
+  bool _submitted = false;
+  bool _isLoading = false;
 
 
 // Fonction de connection / Creation compte
   void _submit() async {
-    print('submit form hehe buton click');
     setState(() {
-      submitted = true;
+      _submitted = true;
+      _isLoading = true;
     });
         try{
-          Future.delayed(Duration(seconds: 3));
           if(_formType == EmailSignInFormType.signin){
-            await widget.auth.signInWithEmailAndPassword(_email, _password);
+           var response = await widget.auth.signInWithEmailAndPassword(_email, _password);
+          //  print("jdjjfkdlf ${await widget.auth.signInWithEmailAndPassword(_email, _password)}");
+            if(response != null){
+               Navigator.of(context).pop(this);
+            }
           } else {
             await widget.auth.createUserWithEmailAndPassword(_email, _password);
           }
-        //  Navigator.of(context).pop();
         } catch(e){
             print(e.toString());
+        } finally {
+         setState(() {
+           _isLoading = false;
+         });
         }
   }
 
   // _emailEditingComplete
   void _emailEditingComplete(){
-   FocusScope.of(context).requestFocus(_passwordFocusNode);
+    final newFocus = widget.emailValidator.isValid(_email) ? _passwordFocusNode : _emailFocusNode;
+   FocusScope.of(context).requestFocus(newFocus);
   }
 
   void _toogleFormType(){
     setState(() {
-      submitted = false;
+      _submitted = false;
       _formType = (_formType == EmailSignInFormType.signin) ? EmailSignInFormType.register : EmailSignInFormType.signin;
     });
     _emailController.clear();
     _passwordController.clear();
   }
 
-  List<Widget> _buildChildren(){
+  List<Widget> _buildChildren(BuildContext context){
     final primaryText = _formType == EmailSignInFormType.signin ? "Sign in" : "Create an account";
     final secondaryText = _formType == EmailSignInFormType.signin ? "Need an account? register" : "Have an account? Sign in";
   //  print(secondaryText);
 
     // Verifie que le champ email et password est remplit
-    bool submitEnable = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password);
-    bool showErrorTextEmail = submitted && ! widget.emailValidator.isValid(_email);
-    bool showErrorTextPassword = submitted && ! widget.emailValidator.isValid(_password);
+    bool submitEnable = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password) && ! _isLoading;
+    bool showErrorTextEmail = _submitted && ! widget.emailValidator.isValid(_email);
+    bool showErrorTextPassword = _submitted && ! widget.emailValidator.isValid(_password);
 
     return [
       TextField(
@@ -79,6 +87,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           labelText: 'Email',
           hintText: 'test@gmail.com',
           errorText: showErrorTextEmail ? widget.invalidEmailErrorText : null,
+          enabled: _isLoading == false
         ),
         autocorrect: false,
         keyboardType: TextInputType.emailAddress,
@@ -93,6 +102,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         decoration: InputDecoration(
           labelText: 'Password',
           errorText: showErrorTextPassword ?  widget.invalidPasswordErrorText : null,
+            enabled: _isLoading == false
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
@@ -108,7 +118,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
       SizedBox(height: 8.0,),
       FlatButton(
-        onPressed: _toogleFormType,
+        onPressed: !_isLoading ? _toogleFormType : null,
         child: Text(secondaryText),
       )
     ];
@@ -122,7 +132,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
-        children: _buildChildren()
+        children: _buildChildren(context)
       ),
     );
   }
