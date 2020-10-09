@@ -17,6 +17,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
@@ -36,6 +38,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         } catch(e){
             print(e.toString());
         }
+  }
+
+  // _emailEditingComplete
+  void _emailEditingComplete(){
+   FocusScope.of(context).requestFocus(_passwordFocusNode);
   }
 
   void _toogleFormType(){
@@ -60,6 +67,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         autocorrect: false,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
+        focusNode: _emailFocusNode,
+        onEditingComplete: _emailEditingComplete,
       ),
       SizedBox(height: 8.0,),
       TextField(
@@ -69,6 +78,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
+        focusNode: _passwordFocusNode,
+        onEditingComplete: _submit,
       ),
       SizedBox(height: 8.0,),
       FormSubmitButton(
