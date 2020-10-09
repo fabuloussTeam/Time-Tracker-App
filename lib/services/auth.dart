@@ -18,6 +18,8 @@ abstract class AuthBase {
   Future<UserModel> signInAnonymously();
   Future<UserModel> signInWithGoogle();
   Future<UserModel> signInWithFacebook();
+  Future<UserModel> signInWithEmailAndPassword(String email, String password);
+  Future<UserModel> createUserWithEmailAndPassword(String email, String password);
   Future<void> signOut();
 }
 
@@ -54,6 +56,7 @@ class Auth implements AuthBase {
     return _userFromFirebase(authResult.user);
   }
 
+
   // Function de connection avec Google
   @override
   Future<UserModel> signInWithGoogle() async {
@@ -86,10 +89,8 @@ class Auth implements AuthBase {
 
   @override
   Future<UserModel> signInWithFacebook() async {
-
     final LoginResult result = await FacebookAuth.instance.login();
     // Create a credential from the access token
-
      if(result != null){
        final FacebookAuthCredential facebookAuthCredential =
        FacebookAuthProvider.credential(result.accessToken.token);
@@ -104,7 +105,40 @@ class Auth implements AuthBase {
     // Once signed in, return the UserCredential
   }
 
-  // Fonction de deconnectio
+  @override
+  Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      return _userFromFirebase(userCredential.user);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
+  @override
+  Future<UserModel> createUserWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      return _userFromFirebase(userCredential.user);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Fonction de deconnection
   Future<void> signOut() async {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
