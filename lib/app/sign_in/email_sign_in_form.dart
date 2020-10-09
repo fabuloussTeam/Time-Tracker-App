@@ -31,10 +31,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
 // Fonction de connection / Creation compte
   void _submit() async {
+    print('submit form hehe buton click');
     setState(() {
       submitted = true;
     });
         try{
+          Future.delayed(Duration(seconds: 3));
           if(_formType == EmailSignInFormType.signin){
             await widget.auth.signInWithEmailAndPassword(_email, _password);
           } else {
@@ -69,7 +71,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     bool submitEnable = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password);
     bool showErrorTextEmail = submitted && ! widget.emailValidator.isValid(_email);
     bool showErrorTextPassword = submitted && ! widget.emailValidator.isValid(_password);
-
 
     return [
       TextField(
