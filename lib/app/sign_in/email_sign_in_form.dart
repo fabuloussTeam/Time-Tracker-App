@@ -39,11 +39,16 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         try{
           if(_formType == EmailSignInFormType.signin){
            var response = await widget.auth.signInWithEmailAndPassword(_email, _password);
+          //  print("jdjjfkdlf ${await widget.auth.signInWithEmailAndPassword(_email, _password)}");
             if(response != null){
                Navigator.of(context).pop(this);
             }
           } else {
-            await widget.auth.createUserWithEmailAndPassword(_email, _password);
+            var response = await widget.auth.createUserWithEmailAndPassword(_email, _password);
+              //print("aaaaajdjjfkdlf ${await widget.auth.createUserWithEmailAndPassword(_email, _password)}");
+            if(response != null){
+              Navigator.of(context).pop(this);
+            }
           }
         } catch(e){
             print(e.toString());
