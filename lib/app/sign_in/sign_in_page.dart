@@ -58,8 +58,13 @@ class SignInPage extends StatelessWidget {
         centerTitle: true,
         elevation: 2.0,
       ),
-      body: Container(
-          child: _buildContaint(context)
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildContaint(context)
+            ],
+        ),
       ),
       backgroundColor: Colors.grey[200],
     );

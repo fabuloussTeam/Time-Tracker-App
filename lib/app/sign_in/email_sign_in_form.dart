@@ -14,13 +14,28 @@ class EmailSignInForm extends StatefulWidget {
 //mainAxisSize permet mettre la hauteur sur l'espace ocuuper nette
 class _EmailSignInFormState extends State<EmailSignInForm> {
 
-  var _formType = EmailSignInFormType.signin;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submit(){
-    print("email: ${_emailController.text} password: ${_passwordController.text}");
+  String get _email => _emailController.text;
+  String get _password => _passwordController.text;
+
+  var _formType = EmailSignInFormType.signin;
+
+
+// Fonction de connection / Creation compte
+  void _submit() async {
+        try{
+          if(_formType == EmailSignInFormType.signin){
+            await widget.auth.signInWithEmailAndPassword(_email, _password);
+          } else {
+            await widget.auth.createUserWithEmailAndPassword(_email, _password);
+          }
+          Navigator.of(context).pop();
+        } catch(e){
+            print(e.toString());
+        }
   }
 
   void _toogleFormType(){
@@ -34,7 +49,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   List<Widget> _buildChildren(){
     final primaryText = _formType == EmailSignInFormType.signin ? "Sign in" : "Create an account";
     final secondaryText = _formType == EmailSignInFormType.signin ? "Need an account? register" : "Have an account? Sign in";
-    print(secondaryText);
+  //  print(secondaryText);
     return [
       TextField(
         controller: _emailController,
