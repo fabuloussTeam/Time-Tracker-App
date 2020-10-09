@@ -40,7 +40,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           } else {
             await widget.auth.createUserWithEmailAndPassword(_email, _password);
           }
-          Navigator.of(context).pop();
+        //  Navigator.of(context).pop();
         } catch(e){
             print(e.toString());
         }
@@ -91,7 +91,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         controller: _passwordController,
         decoration: InputDecoration(
           labelText: 'Password',
-          errorText: showErrorTextPassword ?  widget.invalidPasswordErrorText :  null,
+          errorText: showErrorTextPassword ?  widget.invalidPasswordErrorText : null,
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
