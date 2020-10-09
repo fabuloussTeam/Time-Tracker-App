@@ -62,13 +62,17 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
     // Verifie que le champ email et password est remplit
     bool submitEnable = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password);
+    bool emailValid = widget.emailValidator.isValid(_email);
+    bool passwordValid = widget.emailValidator.isValid(_password);
 
     return [
+
       TextField(
         controller: _emailController,
         decoration: InputDecoration(
           labelText: 'Email',
           hintText: 'test@gmail.com',
+          errorText: emailValid ? null : widget.invalidEmailErrorText,
         ),
         autocorrect: false,
         keyboardType: TextInputType.emailAddress,
@@ -82,12 +86,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         controller: _passwordController,
         decoration: InputDecoration(
           labelText: 'Password',
+          errorText: passwordValid ? null : widget.invalidPasswordErrorText,
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
         focusNode: _passwordFocusNode,
         onEditingComplete: _submit,
         onChanged: (password) => _updateState(),
+
       ),
       SizedBox(height: 8.0,),
       FormSubmitButton(
