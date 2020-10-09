@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:timetrackerapp/app/sign_in/validators.dart';
 import 'package:timetrackerapp/common_widgets/form_submit_button.dart';
 import 'package:timetrackerapp/services/auth.dart';
 
 
 enum EmailSignInFormType { signin, register }
 
-class EmailSignInForm extends StatefulWidget {
+// Utilisation des Mixin: en ajoutan" with EmailAndPasswordValidators
+class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
   final AuthBase auth;
   EmailSignInForm({@required this.auth});
   _EmailSignInFormState createState() => _EmailSignInFormState();
@@ -59,7 +61,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   //  print(secondaryText);
 
     // Verifie que le champ email et password est remplit
-    bool submitEnable = _email.isNotEmpty & _password.isNotEmpty;
+    bool submitEnable = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password);
+
     return [
       TextField(
         controller: _emailController,
