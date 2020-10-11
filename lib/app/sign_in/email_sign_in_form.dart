@@ -38,7 +38,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     });
         try{
           if(_formType == EmailSignInFormType.signin){
-           var response = await widget.auth.signInWithEmailAndPassword(_email, _password);
+           var response = await widget.auth.signInWithEmailAndPassword(_email, _password, context: context);
           //  print("jdjjfkdlf ${await widget.auth.signInWithEmailAndPassword(_email, _password)}");
             if(response != null){
                Navigator.of(context).pop(this);
@@ -51,7 +51,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
             }
           }
         } catch(e){
-            print(e.toString());
+            print("sotie erreur ${e.toString()}");
+
         } finally {
          setState(() {
            _isLoading = false;

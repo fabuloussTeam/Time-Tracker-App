@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -18,7 +19,7 @@ abstract class AuthBase {
   Future<UserModel> signInAnonymously();
   Future<UserModel> signInWithGoogle();
   Future<UserModel> signInWithFacebook();
-  Future<UserModel> signInWithEmailAndPassword(String email, String password);
+  Future<UserModel> signInWithEmailAndPassword(String email, String password, {BuildContext context});
   Future<UserModel> createUserWithEmailAndPassword(String email, String password);
   Future<void> signOut();
 }
@@ -106,11 +107,11 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
+  Future<UserModel> signInWithEmailAndPassword(String email, String password, {context}) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
-          password: password
+          password: password,
       );
       return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
@@ -118,6 +119,21 @@ class Auth implements AuthBase {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        showDialog(
+            context: context,
+            builder: (context){
+              return AlertDialog(
+                title: Text("Sign in failed"),
+                content: Text(e.toString()),
+                actions: [
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("OK"),
+                  )
+                ],
+              );
+            }
+        );
       }
     }
   }
