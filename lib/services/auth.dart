@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 
 // Model User
 class UserModel {
@@ -124,7 +125,7 @@ class Auth implements AuthBase {
         } else {
         //  print('Wrong password provided for that user.');
         print("Android device");
-          showDialog(
+         /* showDialog(
               context: context,
               builder: (context){
                 return AlertDialog(
@@ -138,7 +139,13 @@ class Auth implements AuthBase {
                   ],
                 );
               }
-          );
+          );*/
+
+         PlatformAlertDialog(
+           title: "Sign in failed",
+           content: e.toString(),
+           defaultActionText: "OK",
+         ).show(context);
         }
 
       }

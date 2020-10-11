@@ -6,18 +6,29 @@ class PlatformAlertDialog extends PlateformWidget {
 
   final String title;
   final String content;
-  final String DefaultActionText;
+  final String defaultActionText;
 
-  PlatformAlertDialog({this.title, this.content, this.DefaultActionText}) : assert(title != null), assert(content != null), assert(DefaultActionText != null);
+  PlatformAlertDialog({this.title, this.content, this.defaultActionText}) : assert(title != null), assert(content != null), assert(defaultActionText != null);
 
+
+  Future<bool> show(BuildContext context) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => this
+    );
+  }
+
+  // Contenu pour IOS
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-  return CupertinoAlertDialog(
-    title: Text(title),
-    content: Text(content),
-    actions:  _buildActions(context),
-  );
+    return CupertinoAlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions:  _buildActions(context),
+    );
   }
+
+  // Contenue pour Android
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
@@ -28,6 +39,7 @@ class PlatformAlertDialog extends PlateformWidget {
     );
   }
 
+  //Bouton action
   List<Widget> _buildActions(BuildContext context){
     return [
       PlatformAlertDialogAction(
