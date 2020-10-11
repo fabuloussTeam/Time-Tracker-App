@@ -22,7 +22,7 @@ abstract class AuthBase {
   Future<UserModel> signInWithGoogle();
   Future<UserModel> signInWithFacebook();
   Future<UserModel> signInWithEmailAndPassword(String email, String password, {BuildContext context});
-  Future<UserModel> createUserWithEmailAndPassword(String email, String password);
+  Future<UserModel> createUserWithEmailAndPassword(String email, String password, {BuildContext context});
   Future<void> signOut();
 }
 
@@ -117,13 +117,26 @@ class Auth implements AuthBase {
       );
       return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
+      print(e);
+
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
+        PlatformAlertDialog(
+          title: "Sign in failed",
+          content: "No user found for that email.",
+          defaultActionText: "OK",
+        ).show(context);
       } else if (e.code == 'wrong-password') {
         print(e.toString());
         PlatformAlertDialog(
           title: "Sign in failed",
-          content: e.toString(),
+          content: "Wrong password. Please retry!",
+          defaultActionText: "OK",
+        ).show(context);
+      } else if (e.code == 'invalid-email'){
+        PlatformAlertDialog(
+          title: "Create account failed",
+          content: "The email address is badly formatted.",
           defaultActionText: "OK",
         ).show(context);
       }
@@ -131,18 +144,40 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<UserModel> createUserWithEmailAndPassword(String email, String password) async {
+  Future<UserModel> createUserWithEmailAndPassword(String email, String password, {context}) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
+      print(e);
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        print('The password provided is too weak. Should be at least 6 characters');
+        PlatformAlertDialog(
+          title: "Create account failed",
+          content: "The password provided is too weak. Should be at least 6 characters",
+          defaultActionText: "OK",
+        ).show(context);
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+        PlatformAlertDialog(
+          title: "Create account failed",
+          content: "The account already exists for that email.",
+          defaultActionText: "OK",
+        ).show(context);
+      } else if (e.code == 'invalid-email'){
+        PlatformAlertDialog(
+          title: "Create account failed",
+          content: "The email address is badly formatted.",
+          defaultActionText: "OK",
+        ).show(context);
       }
     } catch (e) {
       print(e);
+      PlatformAlertDialog(
+        title: "Create account failed",
+        content: e.toString(),
+        defaultActionText: "OK",
+      ).show(context);
     }
   }
 
