@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -118,22 +119,28 @@ class Auth implements AuthBase {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-        showDialog(
-            context: context,
-            builder: (context){
-              return AlertDialog(
-                title: Text("Sign in failed"),
-                content: Text(e.toString()),
-                actions: [
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text("OK"),
-                  )
-                ],
-              );
-            }
-        );
+        if(Platform.isIOS){
+           print("show CupertinoAlert dialog");
+        } else {
+        //  print('Wrong password provided for that user.');
+        print("Android device");
+          showDialog(
+              context: context,
+              builder: (context){
+                return AlertDialog(
+                  title: Text("Sign in failed"),
+                  content: Text(e.toString()),
+                  actions: [
+                    FlatButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text("OK"),
+                    )
+                  ],
+                );
+              }
+          );
+        }
+
       }
     }
   }

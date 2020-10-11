@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/app/sign_in/validators.dart';
 import 'package:timetrackerapp/common_widgets/form_submit_button.dart';
@@ -52,7 +54,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           }
         } catch(e){
             print("sotie erreur ${e.toString()}");
-
         } finally {
          setState(() {
            _isLoading = false;
