@@ -8,7 +8,7 @@ class AuthProvider extends InheritedWidget {
   AuthProvider({@required this.auth, @required this.child});
 
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
 
   static AuthBase of(BuildContext context){
     AuthProvider provider  = context.dependOnInheritedWidgetOfExactType<AuthProvider>();

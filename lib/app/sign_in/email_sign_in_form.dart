@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:timetrackerapp/app/sign_in/validators.dart';
 import 'package:timetrackerapp/common_widgets/form_submit_button.dart';
 import 'package:timetrackerapp/services/auth.dart';
+import 'package:timetrackerapp/services/auth_provider.dart';
 
 
 enum EmailSignInFormType { signin, register }
 
 // Utilisation des Mixin: en ajoutan" with EmailAndPasswordValidators
 class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
-  final AuthBase auth;
-  EmailSignInForm({@required this.auth});
+
   _EmailSignInFormState createState() => _EmailSignInFormState();
 }
 
@@ -39,14 +39,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       _isLoading = true;
     });
         try{
+          final auth = AuthProvider.of(context);
           if(_formType == EmailSignInFormType.signin){
-           var response = await widget.auth.signInWithEmailAndPassword(_email, _password, context: context);
+           var response = await auth.signInWithEmailAndPassword(_email, _password, context: context);
           //  print("jdjjfkdlf ${await widget.auth.signInWithEmailAndPassword(_email, _password)}");
             if(response != null){
                Navigator.of(context).pop(this);
             }
           } else {
-            var response = await widget.auth.createUserWithEmailAndPassword(_email, _password, context: context);
+            var response = await auth.createUserWithEmailAndPassword(_email, _password, context: context);
               //print("aaaaajdjjfkdlf ${await widget.auth.createUserWithEmailAndPassword(_email, _password)}");
             if(response != null){
               Navigator.of(context).pop(this);

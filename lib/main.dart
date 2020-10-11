@@ -1,13 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/app/landing_page.dart';
-import 'package:timetrackerapp/app/sign_in/sign_in_page.dart';
 import 'package:timetrackerapp/services/auth.dart';
 import 'package:timetrackerapp/services/auth_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
                   primarySwatch: Colors.blue,
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                 ),
-                home: LandingPage(
-                  auth: Auth(),
-                ),
+                home: LandingPage(),
               );
             }
             return CircularProgressIndicator();

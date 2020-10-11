@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/auth.dart';
+import 'package:timetrackerapp/services/auth_provider.dart';
 
 class HomePage extends StatelessWidget {
 
 // Initialisation de la callback function qui est appele pr la déconnection
-  final AuthBase auth;
-  HomePage({this.auth});
 
   // Fonction de deconnection.
-  Future<void> _signOut() async {
+  Future<void> _signOut(BuildContext context) async {
+    final auth = AuthProvider.of(context);
     try {
          await auth.signOut();
     } catch (e) {
@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
     ).show(context);
     print(didRequestSignOut);
     if(didRequestSignOut == true){
-      _signOut();
+      _signOut(context);
     }
   }
 
