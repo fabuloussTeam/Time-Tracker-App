@@ -6,21 +6,56 @@ class PlatformAlertDialog extends PlateformWidget {
 
   final String title;
   final String content;
-  final String textDefaultAction;
+  final String DefaultActionText;
 
-  PlatformAlertDialog({this.title, this.content, this.textDefaultAction});
+  PlatformAlertDialog({this.title, this.content, this.DefaultActionText}) : assert(title != null), assert(content != null), assert(DefaultActionText != null);
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-    // TODO: implement buildCupertinoWidget
-    return null;
+  return CupertinoAlertDialog(
+    title: Text(title),
+    content: Text(content),
+    actions:  _buildActions(context),
+  );
   }
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
-    // TODO: implement buildMaterialWidget
-   return null;
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: _buildActions(context),
+    );
   }
 
+  List<Widget> _buildActions(BuildContext context){
+    return [
+      PlatformAlertDialogAction(
+        onPressed: () => Navigator.of(context).pop(),
+        child: Text("OK"),
+      ),
+    ];
+  }
+}
 
+class PlatformAlertDialogAction extends PlateformWidget {
+  final Widget child;
+  final VoidCallback onPressed;
+  PlatformAlertDialogAction({this.child, this.onPressed});
+
+  @override
+  Widget buildCupertinoWidget(BuildContext context){
+    return CupertinoDialogAction(
+       child: child,
+       onPressed: onPressed
+    );
+  }
+
+  @override
+  Widget buildMaterialWidget(BuildContext context){
+    return FlatButton(
+        child: child,
+        onPressed: onPressed
+    );
+  }
 }
