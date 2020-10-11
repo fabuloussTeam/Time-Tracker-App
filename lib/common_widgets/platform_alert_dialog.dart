@@ -6,9 +6,14 @@ class PlatformAlertDialog extends PlateformWidget {
 
   final String title;
   final String content;
+  final String cancelActionText;
   final String defaultActionText;
 
-  PlatformAlertDialog({this.title, this.content, this.defaultActionText}) : assert(title != null), assert(content != null), assert(defaultActionText != null);
+  PlatformAlertDialog({
+    @required this.title,
+    @required this.content,
+    this.cancelActionText,
+    @required this.defaultActionText}) : assert(title != null), assert(content != null), assert(defaultActionText != null);
 
 
   Future<bool> show(BuildContext context) async {
@@ -41,12 +46,23 @@ class PlatformAlertDialog extends PlateformWidget {
 
   //Bouton action
   List<Widget> _buildActions(BuildContext context){
-    return [
-      PlatformAlertDialogAction(
-        onPressed: () => Navigator.of(context).pop(),
-        child: Text("OK"),
-      ),
-    ];
+    final actions = <Widget>[];
+    //Ici le cancel button est ajouter ssi le cancelActionText est non null. ie est remplit
+    if(cancelActionText != null){
+      actions.add(
+        PlatformAlertDialogAction(
+          child: Text(cancelActionText),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+      );
+    }
+   actions.add(
+     PlatformAlertDialogAction(
+       child: Text(defaultActionText),
+       onPressed: () => Navigator.of(context).pop(true),
+     ),
+   );
+    return actions;
   }
 }
 

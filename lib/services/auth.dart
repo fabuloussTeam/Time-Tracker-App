@@ -120,34 +120,12 @@ class Auth implements AuthBase {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        if(Platform.isIOS){
-           print("show CupertinoAlert dialog");
-        } else {
-        //  print('Wrong password provided for that user.');
-        print("Android device");
-         /* showDialog(
-              context: context,
-              builder: (context){
-                return AlertDialog(
-                  title: Text("Sign in failed"),
-                  content: Text(e.toString()),
-                  actions: [
-                    FlatButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text("OK"),
-                    )
-                  ],
-                );
-              }
-          );*/
-
-         PlatformAlertDialog(
-           title: "Sign in failed",
-           content: e.toString(),
-           defaultActionText: "OK",
-         ).show(context);
-        }
-
+        print(e.toString());
+        PlatformAlertDialog(
+          title: "Sign in failed",
+          content: e.toString(),
+          defaultActionText: "OK",
+        ).show(context);
       }
     }
   }
