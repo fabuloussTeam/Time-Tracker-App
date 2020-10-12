@@ -104,13 +104,11 @@ class _SignInPageState extends State<SignInPage> {
         centerTitle: true,
         elevation: 2.0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildContaint(context)
           ],
-        ),
       ),
       backgroundColor: Colors.grey[200],
     );
@@ -130,7 +128,7 @@ class _SignInPageState extends State<SignInPage> {
             text: "Sign in with Google",
             textColor: Colors.black87,
             color: Colors.white,
-            onPress: ()=> _signInWithGoogle(context),
+            onPress: _isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 8.0,),
           SocialSignInButton(
@@ -138,14 +136,14 @@ class _SignInPageState extends State<SignInPage> {
               text:"Sign in with Facebook",
               color: Color(0xFF334D92),
               textColor: Colors.white,
-              onPress: ()=>_signInWithFacebook(context)
+              onPress: _isLoading ? null : () =>_signInWithFacebook(context)
           ),
           SizedBox(height: 8.0,),
           SignInButton(
               text:"Sign in with email",
               color: Colors.teal[700],
               textColor: Colors.white,
-              onPress: () =>  _signInWithEmail(context)
+              onPress: _isLoading ? null : () => _signInWithEmail(context)
 
           ),
           SizedBox(height: 8.0,),
@@ -159,7 +157,7 @@ class _SignInPageState extends State<SignInPage> {
               text:"Go anonymous",
               color: Colors.lime[300],
               textColor: Colors.black87,
-              onPress: ()=>_signInAnonymously(context)
+              onPress: _isLoading ? null : ()=>_signInAnonymously(context)
           ),
         ],
       ),

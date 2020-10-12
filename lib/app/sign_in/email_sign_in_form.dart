@@ -75,6 +75,16 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     });
     _emailController.clear();
     _passwordController.clear();
+
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
   }
 
   List<Widget> _buildChildren(BuildContext context){
@@ -86,6 +96,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     bool submitEnable = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password) && ! _isLoading;
     bool showErrorTextEmail = _submitted && ! widget.emailValidator.isValid(_email);
     bool showErrorTextPassword = _submitted && ! widget.emailValidator.isValid(_password);
+
 
     return [
       TextField(
