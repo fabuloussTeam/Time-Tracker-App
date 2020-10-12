@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:timetrackerapp/app/sign_in/sign_in_button.dart';
 import 'package:timetrackerapp/app/sign_in/socialSignInButton.dart';
+import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'dart:async';
 
 import 'package:timetrackerapp/services/auth.dart';
@@ -11,46 +13,91 @@ import 'email_sign_in_page.dart';
 
 
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+
+  bool _isLoading = false;
+
+  void _signInError(BuildContext context, PlatformException e) {
+    PlatformAlertDialog(
+      title: "Sign In failed",
+      content: e.message,
+      defaultActionText: "OK",
+    ).show(context);
+  }
 
   Future<void> _signInAnonymously(BuildContext context) async {
-    final auth = Provider.of<AuthBase>(context, listen: false);
     try {
-        await auth.signInAnonymously();
+      setState(() => _isLoading = true);
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      await auth.signInAnonymously(
+      );
     } catch (e) {
-      print("${e.toString()}");
+      print(
+          "${e.toString(
+          )}");
+      if (e.code == "network_error") {
+        PlatformAlertDialog(
+          title: "Sign In failed",
+          content: "No Connection find!",
+          defaultActionText: "OK",
+        ).show(
+            context);
+      } else {
+        _signInError(
+            context, e);
+      }
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
-    final auth = Provider.of<AuthBase>(context, listen: false);
     try {
-      await auth.signInWithGoogle();
+      setState(()=> _isLoading = true);
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      await auth.signInWithGoogle(
+      );
     } catch (e) {
-      print("${e.toString()}");
+      print(
+          "${e.toString(
+          )}");
+      _signInError(
+          context, e);
+    } finally {
+      setState(()=> _isLoading = false);
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
-    final auth = Provider.of<AuthBase>(context, listen: false);
     try {
+      setState(()=> _isLoading = true);
+      final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithFacebook();
     } catch (e) {
       print("${e.toString()}");
+      _signInError(context, e);
+    } finally {
+      setState(()=> _isLoading = false);
     }
   }
 
   void _signInWithEmail(BuildContext context){
-     Navigator.of(context).push(
-       MaterialPageRoute<void>(
-           fullscreenDialog: true,
-           builder: (context) => EmailSignInPage(),
-       )
-     );
+    Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          fullscreenDialog: true,
+          builder: (context) => EmailSignInPage(),
+        )
+    );
   }
 
- @override
- Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Time Tracker"),
@@ -60,9 +107,9 @@ class SignInPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _buildContaint(context)
-            ],
+          children: [
+            _buildContaint(context)
+          ],
         ),
       ),
       backgroundColor: Colors.grey[200],
@@ -76,14 +123,7 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "Sign in",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 32.0,
-                fontWeight: FontWeight.w600
-            ),
-          ),
+          _buildheader(),
           SizedBox(height: 48.0,),
           SocialSignInButton(
             assetName: "images/google-logo.png",
@@ -127,4 +167,19 @@ class SignInPage extends StatelessWidget {
   }
 
 
+  Widget _buildheader(){
+    if(_isLoading){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Text(
+      "Sign in",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: 32.0,
+          fontWeight: FontWeight.w600
+      ),
+    );
+  }
 }

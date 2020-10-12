@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:timetrackerapp/common_widgets/firebase_auth_exception.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 
 // Model User
@@ -121,17 +122,15 @@ class Auth implements AuthBase {
 
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
-        PlatformAlertDialog(
+        FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
           title: "Sign in failed",
-          content: "No user found for that email.",
-          defaultActionText: "OK",
+          exception: e,
         ).show(context);
       } else if (e.code == 'wrong-password') {
         print(e.toString());
-        PlatformAlertDialog(
+        FirebaseAuthExceptionCustom( // Personalisation de fonction FirebaseAuthException
           title: "Sign in failed",
-          content: "Wrong password. Please retry!",
-          defaultActionText: "OK",
+          exception: e,
         ).show(context);
       } else if (e.code == 'invalid-email'){
         PlatformAlertDialog(
@@ -139,7 +138,13 @@ class Auth implements AuthBase {
           content: "The email address is badly formatted.",
           defaultActionText: "OK",
         ).show(context);
+      }  else if (e.code == 'user-disabled'){
+        FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
+          title: "Sign in failed",
+          exception: e,
+        ).show(context);
       }
+
     }
   }
 
@@ -152,31 +157,27 @@ class Auth implements AuthBase {
       print(e);
       if (e.code == 'weak-password') {
         print('The password provided is too weak. Should be at least 6 characters');
-        PlatformAlertDialog(
-          title: "Create account failed",
-          content: "The password provided is too weak. Should be at least 6 characters",
-          defaultActionText: "OK",
+        FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
+          title: "Sign in failed",
+          exception: e,
         ).show(context);
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
-        PlatformAlertDialog(
-          title: "Create account failed",
-          content: "The account already exists for that email.",
-          defaultActionText: "OK",
+        FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
+          title: "Sign in failed",
+          exception: e,
         ).show(context);
       } else if (e.code == 'invalid-email'){
-        PlatformAlertDialog(
-          title: "Create account failed",
-          content: "The email address is badly formatted.",
-          defaultActionText: "OK",
+        FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
+          title: "Sign in failed",
+          exception: e,
         ).show(context);
       }
     } catch (e) {
       print(e);
-      PlatformAlertDialog(
-        title: "Create account failed",
-        content: e.toString(),
-        defaultActionText: "OK",
+      FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
+        title: "Sign in failed",
+        exception: e,
       ).show(context);
     }
   }
