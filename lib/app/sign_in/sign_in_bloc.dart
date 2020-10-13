@@ -1,6 +1,6 @@
 import 'dart:async';
 
-class SignInBlock {
+class SignInBloc {
   final StreamController<bool> _isLoadingController = StreamController<bool>();
   Stream<bool> get isLoadingStream => _isLoadingController.stream;
 

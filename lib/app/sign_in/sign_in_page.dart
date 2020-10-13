@@ -17,10 +17,16 @@ import 'email_sign_in_page.dart';
 //On est quitter du statefull au state less prck le state isLoading ne ce charge plus ici, mais dans le fichier sign_in_block
 class SignInPage extends StatelessWidget {
 
+  final SignInBloc bloc;
+
+  SignInPage({Key key, @required this.bloc}) : super(key: key);
+
   static Widget create(BuildContext context) {
-    return Provider<SignInBlock>(
-      create: (_) => SignInBlock(),
-      child: SignInPage(),
+    return Provider<SignInBloc>(
+      create: (_) => SignInBloc(),
+      child: Consumer<SignInBloc>(
+          builder: (context, bloc, _) => SignInPage(bloc: bloc),
+      ),
     );
   }
 
@@ -33,7 +39,6 @@ class SignInPage extends StatelessWidget {
   }
 
   Future<void> _signInAnonymously(BuildContext context) async {
-    final bloc = Provider.of<SignInBlock>(context, listen: false);
     try {
       //setState(() => _isLoading = true);
        bloc.setIsLoading(true);
@@ -62,7 +67,6 @@ class SignInPage extends StatelessWidget {
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
-    final bloc = Provider.of<SignInBlock>(context, listen: false);
     try {
      // setState(()=> _isLoading = true);
       bloc.setIsLoading(true);
@@ -82,7 +86,6 @@ class SignInPage extends StatelessWidget {
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
-    final bloc = Provider.of<SignInBlock>(context, listen: false);
     try {
      // setState(()=> _isLoading = true);
       bloc.setIsLoading(true);
@@ -109,7 +112,6 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<SignInBlock>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Time Tracker"),
@@ -177,7 +179,6 @@ class SignInPage extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildheader(bool isLoading){
     if(isLoading){
