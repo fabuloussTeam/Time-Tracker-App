@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:timetrackerapp/app/sign_in/sign_in_bloc.dart';
 import 'package:timetrackerapp/app/sign_in/sign_in_button.dart';
 import 'package:timetrackerapp/app/sign_in/socialSignInButton.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
@@ -14,7 +15,12 @@ import 'email_sign_in_page.dart';
 
 
 class SignInPage extends StatefulWidget {
-
+  static Widget create(BuildContext context) {
+    return Provider<SignInBlock>(
+      create: (_) => SignInBlock(),
+      child: SignInPage(),
+    );
+  }
 
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -99,23 +105,27 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<SignInBlock>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Time Tracker"),
         centerTitle: true,
         elevation: 2.0,
       ),
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildContaint(context)
-          ],
+      //on A initialiser les donne a false prck notre block.isLoadingStream
+      body:  StreamBuilder<bool>(
+        stream: bloc.isLoadingStream,
+        initialData: false,
+        builder: (context, snapshot) {
+          return _buildContaint(context, snapshot.data);
+        }
       ),
+
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _buildContaint(BuildContext context){
+  Widget _buildContaint(BuildContext context, bool isLoading){
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
