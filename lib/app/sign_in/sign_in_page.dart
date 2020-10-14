@@ -17,6 +17,7 @@ import 'email_sign_in_page.dart';
 //On est quitter du statefull au state less prck le state isLoading ne ce charge plus ici, mais dans le fichier sign_in_block
 class SignInPage extends StatelessWidget {
 
+  // on recupere block du constructeur que on charge dans le consumer.
   final SignInBloc bloc;
 
   SignInPage({Key key, @required this.bloc}) : super(key: key);
@@ -24,7 +25,8 @@ class SignInPage extends StatelessWidget {
   static Widget create(BuildContext context) {
     return Provider<SignInBloc>(
       create: (_) => SignInBloc(),
-      child: Consumer<SignInBloc>(
+      dispose: (context, bloc) => bloc.dispose(),
+      child: Consumer<SignInBloc>( // consumer permet de refractorer le code : var bloc = Provider.of<SignInBloc>() en bloc
           builder: (context, bloc, _) => SignInPage(bloc: bloc),
       ),
     );
