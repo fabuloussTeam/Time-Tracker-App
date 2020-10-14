@@ -23,8 +23,9 @@ class SignInPage extends StatelessWidget {
   SignInPage({Key key, @required this.bloc}) : super(key: key);
 
   static Widget create(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context);
     return Provider<SignInBloc>(
-      create: (_) => SignInBloc(),
+      create: (_) => SignInBloc(auth: auth),
       dispose: (context, bloc) => bloc.dispose(),
       child: Consumer<SignInBloc>( // consumer permet de refractorer le code : var bloc = Provider.of<SignInBloc>() en bloc
           builder: (context, bloc, _) => SignInPage(bloc: bloc),
@@ -43,10 +44,10 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
       //setState(() => _isLoading = true);
-       bloc.setIsLoading(true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInAnonymously(
-      );
+     //  bloc.setIsLoading(true);
+
+      bloc.signInAnonymously();
+
     } catch (e) {
       print(
           "${e.toString(
@@ -64,42 +65,31 @@ class SignInPage extends StatelessWidget {
       }
     } finally {
      // setState(() => _isLoading = false);
-      bloc.setIsLoading(false);
+     // bloc.setIsLoading(false);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
      // setState(()=> _isLoading = true);
-      bloc.setIsLoading(true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInWithGoogle(
-      );
+     // bloc.setIsLoading(true);
+      bloc.signInWithGoogle();
     } catch (e) {
       print(
           "${e.toString(
           )}");
       _signInError(
           context, e);
-    } finally {
-      //setState(()=> _isLoading = false);
-      bloc.setIsLoading(false);
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
      // setState(()=> _isLoading = true);
-      bloc.setIsLoading(true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInWithFacebook();
+      bloc.signInWithFacebook();
     } catch (e) {
       print("${e.toString()}");
       _signInError(context, e);
-    } finally {
-    ///  setState(()=> _isLoading = false);
-      bloc.setIsLoading(false);
-
     }
   }
 
