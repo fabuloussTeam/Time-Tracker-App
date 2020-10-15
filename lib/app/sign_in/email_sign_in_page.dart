@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetrackerapp/services/auth.dart';
 
-import 'email_sign_in_form.dart';
+import 'email_sign_in_form_stateful.dart';
 
 class EmailSignInPage extends StatelessWidget {
   @override
@@ -21,7 +21,7 @@ class EmailSignInPage extends StatelessWidget {
   }
 
   Widget _builContext(BuildContext context) {
-    return EmailSignInForm();
+    return EmailSignInFormStateful();
   }
 }
 

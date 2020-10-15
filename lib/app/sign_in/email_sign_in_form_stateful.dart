@@ -10,14 +10,14 @@ import 'package:timetrackerapp/services/auth.dart';
 enum EmailSignInFormType { signin, register }
 
 // Utilisation des Mixin: en ajoutan" with EmailAndPasswordValidators
-class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
+class EmailSignInFormStateful extends StatefulWidget with EmailAndPasswordValidators {
 
-  _EmailSignInFormState createState() => _EmailSignInFormState();
+  @override
+  _EmailSignInFormStatefulState createState() => _EmailSignInFormStatefulState();
 }
 
 //mainAxisSize permet mettre la hauteur sur l'espace ocuuper nette
-class _EmailSignInFormState extends State<EmailSignInForm> {
-
+class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -127,7 +127,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         focusNode: _passwordFocusNode,
         onEditingComplete: _submit,
         onChanged: (password) => _updateState(),
-
       ),
       SizedBox(height: 8.0,),
       FormSubmitButton(
