@@ -9,6 +9,7 @@ class EmailSignInModel {
 
   EmailSignInModel({this.email, this.password, this.isLoading, this.submitted, this.formType});
 
+  // Creation d'une copy de EmailSignInModel coe c'est immutable
    copyWith( {email, password, formType, isLoading, submitted} ) {
     EmailSignInModel(
       email: email,
