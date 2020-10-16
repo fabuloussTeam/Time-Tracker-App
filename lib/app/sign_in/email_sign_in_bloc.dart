@@ -38,7 +38,14 @@ Future<void> submit() async {
     try{
       // ignore: unrelated_type_equality_checks
       if(_model.formType == EmailSignInFormType.signin){
-         await auth.signInWithEmailAndPassword(_model.email, _model.password, context);
+        var response =  await auth.signInWithEmailAndPassword(_model.email, _model.password, context);
+         if(response != null){
+           print("connecter au dashboard $response");
+            Navigator.of(context).pop(this);
+         } else {
+           print("Non connecté au dashboard $response");
+
+         }
       } else {
          await auth.createUserWithEmailAndPassword(_model.email, _model.password, context);
       }
