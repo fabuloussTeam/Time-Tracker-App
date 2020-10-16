@@ -22,8 +22,8 @@ abstract class AuthBase {
   Future<UserModel> signInAnonymously();
   Future<UserModel> signInWithGoogle();
   Future<UserModel> signInWithFacebook();
-  Future<UserModel> signInWithEmailAndPassword(String email, String password, {BuildContext context});
-  Future<UserModel> createUserWithEmailAndPassword(String email, String password, {BuildContext context});
+  Future<UserModel> signInWithEmailAndPassword(String email, String password, context);
+  Future<UserModel> createUserWithEmailAndPassword(String email, String password, context);
   Future<void> signOut();
 }
 
@@ -110,7 +110,7 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<UserModel> signInWithEmailAndPassword(String email, String password, {context}) async {
+  Future<UserModel> signInWithEmailAndPassword(String email, String password, context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
@@ -134,7 +134,7 @@ class Auth implements AuthBase {
         ).show(context);
       } else if (e.code == 'invalid-email'){
         PlatformAlertDialog(
-          title: "Create account failed",
+          title: "Sign in failed",
           content: "The email address is badly formatted.",
           defaultActionText: "OK",
         ).show(context);
@@ -144,12 +144,11 @@ class Auth implements AuthBase {
           exception: e,
         ).show(context);
       }
-
     }
   }
 
   @override
-  Future<UserModel> createUserWithEmailAndPassword(String email, String password, {context}) async {
+  Future<UserModel> createUserWithEmailAndPassword(String email, String password, context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       return _userFromFirebase(userCredential.user);
@@ -168,6 +167,7 @@ class Auth implements AuthBase {
           exception: e,
         ).show(context);
       } else if (e.code == 'invalid-email'){
+        print("email invalid");
         FirebaseAuthExceptionCustom( // Personalisation de la fonction FirebaseAuthException
           title: "Sign in failed",
           exception: e,

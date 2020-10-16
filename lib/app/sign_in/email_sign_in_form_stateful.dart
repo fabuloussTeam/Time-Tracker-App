@@ -41,13 +41,13 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
         try{
           final auth = Provider.of<AuthBase>(context, listen: false);
           if(_formType == EmailSignInFormType.signin){
-           var response = await auth.signInWithEmailAndPassword(_email, _password, context: context);
+           var response = await auth.signInWithEmailAndPassword(_email, _password, context);
           //  print("jdjjfkdlf ${await widget.auth.signInWithEmailAndPassword(_email, _password)}");
             if(response != null){
                Navigator.of(context).pop(this);
             }
           } else {
-            var response = await auth.createUserWithEmailAndPassword(_email, _password, context: context);
+            var response = await auth.createUserWithEmailAndPassword(_email, _password, context);
               //print("aaaaajdjjfkdlf ${await widget.auth.createUserWithEmailAndPassword(_email, _password)}");
             if(response != null){
               Navigator.of(context).pop(this);
