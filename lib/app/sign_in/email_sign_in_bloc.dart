@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:timetrackerapp/app/sign_in/email_sign_in_model.dart';
 import 'package:timetrackerapp/services/auth.dart';
 
-class SignInEmailBloc {
+class EmailSignInBloc {
 
   final AuthBase auth;
-  SignInEmailBloc({@required this.auth});
+  EmailSignInBloc({@required this.auth});
 
   final StreamController<EmailSignInModel> _modelController = StreamController<EmailSignInModel>();
   Stream<EmailSignInModel> get modelStream => _modelController.stream;
@@ -20,7 +20,7 @@ class SignInEmailBloc {
 
   // Creation de la  Function submit
 
-  void submit() async {
+  Future<void> submit() async {
     updateWith(submitted: true, isLoading: true);
     try{
       // ignore: unrelated_type_equality_checks
@@ -54,8 +54,6 @@ class SignInEmailBloc {
       isLoading: isLoading,
       submitted: submitted
     );
-
    _modelController.add(_model);
   }
-
 }

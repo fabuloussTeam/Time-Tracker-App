@@ -12,18 +12,19 @@ class EmailSignInPage extends StatelessWidget {
         title: Text("Sign In"),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Card(
-            child: _builContext(context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+              child: EmailSignInFormBlocBased.create(context),
+          ),
         ),
-      )
+      ),
+      backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _builContext(BuildContext context) {
-    return EmailSignInFormBlocBased.create(context);
-  }
+
 }
 
 
