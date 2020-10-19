@@ -43,8 +43,7 @@ Future<void> submit() async {
            print("connecter au dashboard $response");
             Navigator.of(context).pop(this);
          } else {
-           print("Non connecté au dashboard $response");
-
+            print("Non connecté au dashboard $response");
          }
       } else {
          await auth.createUserWithEmailAndPassword(_model.email, _model.password, context);

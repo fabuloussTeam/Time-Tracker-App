@@ -7,27 +7,17 @@ class SignInBloc {
 
   // Pour mettre a jour les fonction signInAnonymously ...
   final AuthBase auth;
-  SignInBloc({@required this.auth});
-
-  final StreamController<bool> _isLoadingController = StreamController<bool>();
-  Stream<bool> get isLoadingStream => _isLoadingController.stream;
-
-  void _setIsLoading(bool isLoading) => _isLoadingController.add(isLoading);
-
-
-  void dispose(){
-    _isLoadingController.close();
-  }
-
+  final ValueNotifier<bool> isLoading;
+  SignInBloc({@required this.auth, @required this.isLoading});
 
   Future<UserModel> _signIn(Future<UserModel> Function() signInMethod) async {
     try{
-      _setIsLoading(true);
+      isLoading.value = true;
       return await signInMethod();
     } catch(e) {
       rethrow;
     } finally {
-      _setIsLoading(false);
+     isLoading.value = false;
     }
   }
 
