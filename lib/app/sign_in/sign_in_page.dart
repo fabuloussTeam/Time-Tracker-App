@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:timetrackerapp/app/sign_in/sign_in_bloc.dart';
+import 'package:timetrackerapp/app/sign_in/sign_in_manager.dart';
 import 'package:timetrackerapp/app/sign_in/sign_in_button.dart';
 import 'package:timetrackerapp/app/sign_in/socialSignInButton.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
@@ -18,21 +18,21 @@ import 'email_sign_in_page.dart';
 class SignInPage extends StatelessWidget {
 
   // on recupere block du constructeur que on charge dans le consumer.
-  final SignInBloc bloc;
+  final SignInManager manager;
   final bool isLoading;
 
-  SignInPage({Key key, @required this.bloc, this.isLoading}) : super(key: key);
+  SignInPage({Key key, @required this.manager, this.isLoading}) : super(key: key);
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
     return ChangeNotifierProvider<ValueNotifier<bool>>(
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer<ValueNotifier<bool>>(
-        builder: (_, isLoading, __) => Provider<SignInBloc>(
-            create: (_) =>  SignInBloc(auth: auth, isLoading: isLoading),
-            child: Consumer<SignInBloc>( // consumer permet de refractorer le code : var bloc = Provider.of<SignInBloc>() en bloc
-              builder: (context, bloc, _) => SignInPage(
-                  bloc: bloc,
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+            create: (_) =>  SignInManager(auth: auth, isLoading: isLoading),
+            child: Consumer<SignInManager>( // consumer permet de refractorer le code : var bloc = Provider.of<SignInBloc>() en bloc
+              builder: (context, manager, _) => SignInPage(
+                  manager: manager,
                   isLoading: isLoading.value,
               ),
             ),
@@ -54,7 +54,7 @@ class SignInPage extends StatelessWidget {
       //setState(() => _isLoading = true);
      //  bloc.setIsLoading(true);
 
-      bloc.signInAnonymously();
+      manager.signInAnonymously();
 
     } catch (e) {
       print(
@@ -81,7 +81,7 @@ class SignInPage extends StatelessWidget {
     try {
      // setState(()=> _isLoading = true);
      // bloc.setIsLoading(true);
-      bloc.signInWithGoogle();
+      manager.signInWithGoogle();
     } catch (e) {
       print(
           "${e.toString(
@@ -94,7 +94,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
      // setState(()=> _isLoading = true);
-      bloc.signInWithFacebook();
+      manager.signInWithFacebook();
     } catch (e) {
       print("${e.toString()}");
       _signInError(context, e);

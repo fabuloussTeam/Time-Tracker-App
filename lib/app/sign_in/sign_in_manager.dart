@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:timetrackerapp/services/auth.dart';
 
-class SignInBloc {
+class SignInManager {
 
   // Pour mettre a jour les fonction signInAnonymously ...
   final AuthBase auth;
   final ValueNotifier<bool> isLoading;
-  SignInBloc({@required this.auth, @required this.isLoading});
+  SignInManager({@required this.auth, @required this.isLoading});
 
   Future<UserModel> _signIn(Future<UserModel> Function() signInMethod) async {
     try{
