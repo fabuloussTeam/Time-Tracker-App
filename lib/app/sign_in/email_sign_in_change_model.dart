@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:timetrackerapp/app/sign_in/validators.dart';
+import 'package:timetrackerapp/services/auth.dart';
 
 import 'email_sign_in_form_stateful.dart';
 
@@ -10,14 +11,59 @@ class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
   EmailSignInFormType formType;
   bool isLoading;
   bool submitted;
+  final AuthBase auth;
 
   EmailSignInChangeModel({
+    @required this.auth,
     this.email = '',
     this.password = '',
     this.isLoading = false,
     this.submitted = false,
     this.formType = EmailSignInFormType.signin
   });
+
+
+  // Creation de la  Function submit
+  Future<void> submit(context) async {
+    updateWith(submitted: true, isLoading: true);
+    try{
+      // ignore: unrelated_type_equality_checks
+      if(formType == EmailSignInFormType.signin){
+         var response =  await auth.signInWithEmailAndPassword(email, password, context);
+        if(response != null){
+          print("connecter au dashboard $response");
+          Navigator.of(context).pop(this);
+        } else {
+          print("Non connecté au dashboard $response");
+        }
+      } else {
+        await auth.createUserWithEmailAndPassword(email, password, context);
+      }
+    } catch(e){
+      rethrow;
+    } finally {
+      updateWith(isLoading: false);
+    }
+  }
+
+
+  void  toogleFormType(){
+    final formType = (this.formType == EmailSignInFormType.signin)
+        ? EmailSignInFormType.register
+        : EmailSignInFormType.signin;
+
+    updateWith(
+      email: "",
+      password: "",
+      formType: formType,
+      isLoading: false,
+      submitted: false,
+    );
+  }
+
+  void updateEmail(String email) => updateWith(email: email);
+  void updatePassword(String password) => updateWith(password: password);
+
 
   String get primaryButtonText {
     return formType == EmailSignInFormType.signin
