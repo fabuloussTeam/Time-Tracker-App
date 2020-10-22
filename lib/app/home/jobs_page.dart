@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/auth.dart';
 
-class HomePage extends StatelessWidget {
+class JobsPage extends StatelessWidget {
 
 // Initialisation de la callback function qui est appele pr la déconnection
 
@@ -34,7 +34,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page"),
+        title: Text("Jobs"),
+        centerTitle: true,
         actions: [
           FlatButton(
               onPressed: () => confirmSignOut(context),
