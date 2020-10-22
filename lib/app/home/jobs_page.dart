@@ -16,10 +16,7 @@ class JobsPage extends StatelessWidget {
       print("${e.toString()}");
     }
   }
-  
-  void _createJob() {
 
-  }
 
   Future<void> confirmSignOut(BuildContext context) async {
     final didRequestSignOut = await PlatformAlertDialog(
@@ -34,6 +31,9 @@ class JobsPage extends StatelessWidget {
     }
   }
 
+  void _createJob() {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +47,17 @@ class JobsPage extends StatelessWidget {
               child: Text("Logout", style: TextStyle(fontSize: 18.0, color: Colors.white)),
           )
         ],
-
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: _createJob,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text("jobs page")
+          ],
+        ),
       ),
     );
   }
