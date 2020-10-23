@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timetrackerapp/app/home/models/job.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/auth.dart';
+import 'package:timetrackerapp/services/database.dart';
 
 class JobsPage extends StatelessWidget {
 
@@ -31,8 +33,11 @@ class JobsPage extends StatelessWidget {
     }
   }
 
-  void _createJob() {
+  Future<void> _createJob(BuildContext context) async {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.createJob(Job(name: "Dev WordPress", ratePerHour: 24));
 
+      print("On a clicker ici");
   }
 
   @override
@@ -50,7 +55,7 @@ class JobsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: _createJob,
+        onPressed: () => _createJob(context),
       ),
       body: SingleChildScrollView(
         child: Column(
