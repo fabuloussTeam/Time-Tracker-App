@@ -10,6 +10,7 @@ import 'api_path.dart';
 
 abstract class Database {
   Future<void> createJob({Job job, BuildContext context});
+  Stream<List<Job>> jobStream();
 
 }
 
@@ -28,7 +29,6 @@ class FirestoreDatabase implements Database {
     final reference = FirebaseFirestore.instance.doc(path);
    //  print("$path: $data");
      print("$data");
-
      reference.set(data)
         .then((value) => print("Valuer added"))
         .catchError((onError) => PlatformAlertDialog(
@@ -37,6 +37,19 @@ class FirestoreDatabase implements Database {
          defaultActionText: "OK",
      ).show(context));
   }
+
+
+ Stream<List<Job>> jobStream() {
+    final path = APIPath.jobs(uid);
+    final reference = FirebaseFirestore.instance.collection(path);
+    final snapshots = reference.snapshots();
+    return snapshots.map((snapshot) => snapshot.docs.map(
+          (snapshot) => Job.fromMap(snapshot.data())
+      ).toList()
+    );
+
+   // snapshots.map((snapshot) => print("snapshot prsr $snapshot"));
+ }
 
 }
 

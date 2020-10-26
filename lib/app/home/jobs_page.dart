@@ -39,12 +39,12 @@ class JobsPage extends StatelessWidget {
         job: Job(name: "Dev WordPress", ratePerHour: 24),
         context: context
        );
-
       print("On a clicker ici");
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text("Jobs"),
@@ -60,13 +60,27 @@ class JobsPage extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () => _createJob(context),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text("jobs page")
-          ],
-        ),
-      ),
+      body: _buildcontents(context),
+    );
+  }
+
+  Widget _buildcontents(BuildContext context) {
+    final database = Provider.of<Database>(context, listen: false);
+    return StreamBuilder<List<Job>>(
+      stream: database.jobStream(),
+      builder: (context, snapshot){
+        if(snapshot.hasData) {
+          final jobs = snapshot.data;
+          final children = jobs.map((job) => Text(job.name)).toList();
+          return ListView(children: children);
+        }
+        if(snapshot.hasError){
+          return Center(
+            child: Text("Some error occured"),
+          );
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 
