@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:timetrackerapp/app/sign_in/email_sign_in_change_model.dart';
 import 'package:timetrackerapp/app/sign_in/email_sign_in_model.dart';
@@ -47,7 +48,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
     try{
            // ignore: unnecessary_statements
         await model.submit(context);
-    } catch(e) {
+    } on PlatformException catch (e) {
       print("sotie erreur xxxx ${e.toString()}");
       PlatformAlertDialog(
         title: "Create account failed",

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:timetrackerapp/app/home/models/job.dart';
+import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/database.dart';
 
 class AddJobPage extends StatefulWidget {
@@ -42,9 +44,18 @@ class _AddJobPageState extends State<AddJobPage> {
   //Fonction de soumission du formulaire
   Future<void> _submit(context) async{
     if(_validateAndSaveForm()) {
-     final job = Job(name: _name, ratePerHour: _ratePerHour);
-     await widget.database.createJob(job: job, context: context);
-     Navigator.of(context).pop();
+      try {
+        final job = Job(name: _name, ratePerHour: _ratePerHour);
+        await widget.database.createJob(job: job, context: context);
+        Navigator.of(context).pop();
+      } on PlatformException catch (e) {
+        PlatformAlertDialog(
+          title: "Operation failed",
+          content: "Element not added",
+          defaultActionText: "OK",
+        ).show(context);
+      }
+
     }
  }
 
