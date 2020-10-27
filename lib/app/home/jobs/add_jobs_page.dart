@@ -30,11 +30,35 @@ class _AddJobPageState extends State<AddJobPage> {
           child: Card(
             child: Padding(
               padding: EdgeInsets.all(16.0),
-              child: Placeholder(),
+              child: _buildForm()
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildForm() {
+    return Form(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: _buildFormChildren(),
+      ),
+    );
+  }
+
+  List<Widget> _buildFormChildren() {
+    return [
+      TextFormField(
+        decoration: InputDecoration(labelText: 'Job name'),
+      ),
+      TextFormField(
+        decoration: InputDecoration(labelText: "Rate per hour"),
+        keyboardType: TextInputType.numberWithOptions(
+          signed: false,
+          decimal: false
+        ),
+      )
+    ];
   }
 }
