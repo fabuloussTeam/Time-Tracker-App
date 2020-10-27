@@ -23,6 +23,18 @@ class _AddJobPageState extends State<AddJobPage> {
         elevation: 2.0,
         title: Text("New Job"),
       ),
+      backgroundColor: Colors.grey[200],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Placeholder(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
