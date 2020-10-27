@@ -118,12 +118,12 @@ class _AddJobPageState extends State<AddJobPage> {
       ),
       TextFormField(
         decoration: InputDecoration(labelText: "Rate per hour"),
-        validator: (value) => value.isNotEmpty ? null : "Name can 't be empty",
+       // validator: (value) => value.isNotEmpty ? null : "Name can 't be empty",
         keyboardType: TextInputType.numberWithOptions(
             signed: false,
             decimal: false
         ),
-        onSaved: (value) => _ratePerHour = int.parse(value) ?? 0,
+        onSaved: (value) => _ratePerHour = int.tryParse(value) ?? 0,
       ),
     ];
   }
