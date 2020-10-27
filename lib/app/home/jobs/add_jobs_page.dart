@@ -45,9 +45,21 @@ class _AddJobPageState extends State<AddJobPage> {
   Future<void> _submit(context) async{
     if(_validateAndSaveForm()) {
       try {
-        final job = Job(name: _name, ratePerHour: _ratePerHour);
-        await widget.database.createJob(job: job, context: context);
-        Navigator.of(context).pop();
+        final jobs = await widget.database.jobStream().first;
+        final allNames = jobs.map((job) => job.name).toList();
+        print("all name in DB: $allNames");
+        if(allNames.contains(_name)){
+          PlatformAlertDialog(
+            title: "This job name already used",
+            content: "Please choose a different",
+            defaultActionText: "OK",
+          ).show(context);
+        } else {
+          final job = Job(name: _name, ratePerHour: _ratePerHour);
+          await widget.database.createJob(job: job, context: context);
+          Navigator.of(context).pop();
+        }
+
       } on PlatformException catch (e) {
         PlatformAlertDialog(
           title: "Operation failed",
@@ -106,6 +118,7 @@ class _AddJobPageState extends State<AddJobPage> {
       ),
       TextFormField(
         decoration: InputDecoration(labelText: "Rate per hour"),
+        validator: (value) => value.isNotEmpty ? null : "Name can 't be empty",
         keyboardType: TextInputType.numberWithOptions(
             signed: false,
             decimal: false
