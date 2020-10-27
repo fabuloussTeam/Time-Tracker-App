@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timetrackerapp/app/home/models/job.dart';
 import 'package:timetrackerapp/services/database.dart';
 
 class AddJobPage extends StatefulWidget {
-
+//Pour utiliser la database dans cette classe
+// on le passe implecitement par le constructeur
   final Database database;
   const AddJobPage({Key key, @required this.database});
 
@@ -37,12 +39,12 @@ class _AddJobPageState extends State<AddJobPage> {
     return false;
   }
 
-  void _submit(){
-    //TODO: Validate & save form
+  //Fonction de soumission du formulaire
+  Future<void> _submit(context) async{
     if(_validateAndSaveForm()) {
-      print("form saved ++++:name: $_name, rateper hour : $_ratePerHour");
-      //TODO: submit data to Firestore
-
+     final job = Job(name: _name, ratePerHour: _ratePerHour);
+     await widget.database.createJob(job: job, context: context);
+     Navigator.of(context).pop();
     }
  }
 
@@ -54,7 +56,7 @@ class _AddJobPageState extends State<AddJobPage> {
         title: Text("New Job"),
         actions: [
           FlatButton(
-            onPressed: _submit,
+            onPressed: () =>_submit(context),
             child: Text("Save", style: TextStyle(fontSize: 18, color: Colors.white),),
           )
         ],

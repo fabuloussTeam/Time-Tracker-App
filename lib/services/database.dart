@@ -15,6 +15,8 @@ abstract class Database {
 
 }
 
+String docementIdFromCurrentDate() => DateTime.now().toIso8601String();
+
 class FirestoreDatabase implements Database {
 // UID de l'utilisateur connecté.
   final String uid;
@@ -24,7 +26,7 @@ class FirestoreDatabase implements Database {
   final _service = FirestoreService.instance;
 
   Future<void> createJob({Job job, BuildContext context}) async => await _service.setData (
-      path: APIPath.job(uid, 'job_abc'),
+      path: APIPath.job(uid, docementIdFromCurrentDate()),
       data: job.toMap(),
       context: context
   );
