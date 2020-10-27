@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timetrackerapp/app/home/jobs/add_jobs_page.dart';
 import 'package:timetrackerapp/app/home/models/job.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/auth.dart';
@@ -58,7 +59,7 @@ class JobsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createJob(context),
+        onPressed: () => AddJobPage.show(context),
       ),
       body: _buildcontents(context),
     );
