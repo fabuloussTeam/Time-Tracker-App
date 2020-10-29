@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:timetrackerapp/app/home/jobs/edit_jobs_page.dart';
 import 'package:timetrackerapp/app/home/jobs/empty_content.dart';
@@ -36,6 +37,19 @@ class JobsPage extends StatelessWidget {
     }
   }
 
+  Future<void>_delete(BuildContext context, Job job) async {
+    try{
+      final database = Provider.of<Database>(context, listen: false);
+      await database.deleteJob(job);
+    } on PlatformException catch (e) {
+      PlatformAlertDialog(
+        title: "Operation failed",
+        content: e.toString(),
+        defaultActionText: "OK",
+      ).show(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,9 +79,18 @@ class JobsPage extends StatelessWidget {
         if(snapshot.hasData) {
           final jobs = snapshot.data;
           if(jobs.isNotEmpty){
-            final children = jobs.map((job) => JobListTile(
-              job: job,
-              ontap: () => EditJobPage.show(context, job: job),
+            final children = jobs.map((job) => Dismissible(
+              key: Key("job-${job.id}"),
+              background: Container(
+                  color: Colors.red,
+                  child: Icon(Icons.delete, color: Colors.white),
+              ),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) => _delete(context, job),
+              child: JobListTile(
+                job: job,
+                ontap: () => EditJobPage.show(context, job: job),
+              ),
             )).toList();
             return ListView(children: children);
           }

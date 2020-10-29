@@ -9,6 +9,7 @@ class FirestoreService {
   FirestoreService._();
   static final instance = FirestoreService._();
 
+  // Add and Edit item
   Future<void> setData({String path, Map<String, dynamic> data, BuildContext context}) async {
     final reference = FirebaseFirestore.instance.doc(path);
     //  print("$path: $data");
@@ -22,13 +23,21 @@ class FirestoreService {
     ).show(context));
   }
 
+  // Fetch to database function
   Stream<List<T>> collectionStream<T>({
     @required String path,
-    @required T builder(Map<String, dynamic> data, String id) 
+    @required T builder(Map<String, dynamic> data, String id)
   }) {
     final reference = FirebaseFirestore.instance.collection(path);
     final snapshots = reference.snapshots();
     return snapshots.map((snapshot) => snapshot.docs.map((snapshot) => builder(snapshot.data(), snapshot.id)).toList());
+  }
+
+  // Delete function
+  Future<void> deleteData({String path}) async {
+    final reference = FirebaseFirestore.instance.doc(path);
+    print("delete $path");
+     await reference.delete();
   }
 
 }
