@@ -10,7 +10,7 @@ import 'api_path.dart';
 
 
 abstract class Database {
-  Future<void> createJob({Job job, BuildContext context});
+  Future<void> setJob({Job job, BuildContext context});
   Stream<List<Job>> jobStream();
 
 }
@@ -25,8 +25,9 @@ class FirestoreDatabase implements Database {
   // Creation d'un constructeur priver
   final _service = FirestoreService.instance;
 
-  Future<void> createJob({Job job, BuildContext context}) async => await _service.setData (
-      path: APIPath.job(uid, docementIdFromCurrentDate()),
+  Future<void> setJob({Job job, BuildContext context}) async => await _service.setData (
+    //j'ai retirer documentIdCurrent et remplace par job.id qui est generer par la date
+      path: APIPath.job(uid, job.id),
       data: job.toMap(),
       context: context
   );

@@ -59,6 +59,9 @@ class _EditJobPageState extends State<EditJobPage> {
       try {
         final jobs = await widget.database.jobStream().first;
         final allNames = jobs.map((job) => job.name).toList();
+        if(widget.job != null){
+          allNames.remove(widget.job.name);
+        }
         print("all name in DB: $allNames");
         if(allNames.contains(_name)){
           PlatformAlertDialog(
@@ -67,8 +70,9 @@ class _EditJobPageState extends State<EditJobPage> {
             defaultActionText: "OK",
           ).show(context);
         } else {
-          final job = Job(name: _name, ratePerHour: _ratePerHour);
-          await widget.database.createJob(job: job, context: context);
+          final id = widget.job?.id ?? docementIdFromCurrentDate();
+          final job = Job(id: id, name: _name, ratePerHour: _ratePerHour);
+          await widget.database.setJob(job: job, context: context);
           Navigator.of(context).pop();
         }
 
