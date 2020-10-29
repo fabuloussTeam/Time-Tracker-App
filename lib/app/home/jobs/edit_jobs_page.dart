@@ -5,32 +5,42 @@ import 'package:timetrackerapp/app/home/models/job.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/database.dart';
 
-class AddJobPage extends StatefulWidget {
+class EditJobPage extends StatefulWidget {
 //Pour utiliser la database dans cette classe
 // on le passe implecitement par le constructeur
   final Database database;
-  const AddJobPage({Key key, @required this.database});
+  final Job job; // Recuperation du job courant que on veut modifier
+  const EditJobPage({Key key, @required this.database, this.job});
 
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show(BuildContext context, {Job job}) async {
     final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (context) => AddJobPage(database: database),
+            builder: (context) => EditJobPage(database: database, job: job),
             fullscreenDialog: true
         )
     );
   }
 
   @override
-  _AddJobPageState createState() => _AddJobPageState();
+  _EditJobPageState createState() => _EditJobPageState();
 }
 
-class _AddJobPageState extends State<AddJobPage> {
+class _EditJobPageState extends State<EditJobPage> {
 
   final _formKey = GlobalKey<FormState>();
 
   String _name;
   int _ratePerHour;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.job != null){
+      _name = widget.job.name;
+      _ratePerHour = widget.job.ratePerHour;
+    }
+  }
 
   bool _validateAndSaveForm() {
     final form = _formKey.currentState;
@@ -40,6 +50,8 @@ class _AddJobPageState extends State<AddJobPage> {
     }
     return false;
   }
+
+
 
   //Fonction de soumission du formulaire
   Future<void> _submit(context) async{
@@ -76,7 +88,7 @@ class _AddJobPageState extends State<AddJobPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        title: Text("New Job"),
+        title:  Text(widget.job == null ? "New Job" : 'Edit job'),
         actions: [
           FlatButton(
             onPressed: () =>_submit(context),
@@ -115,10 +127,12 @@ class _AddJobPageState extends State<AddJobPage> {
         decoration: InputDecoration(labelText: 'Job name'),
         validator: (value) => value.isNotEmpty ? null : "Name can 't be empty",
         onSaved: (value) => _name = value,
+        initialValue: _name,
       ),
       TextFormField(
         decoration: InputDecoration(labelText: "Rate per hour"),
-       // validator: (value) => value.isNotEmpty ? null : "Name can 't be empty",
+        initialValue: _ratePerHour != null ?  "$_ratePerHour" : null,
+        // validator: (value) => value.isNotEmpty ? null : "Name can 't be empty",
         keyboardType: TextInputType.numberWithOptions(
             signed: false,
             decimal: false

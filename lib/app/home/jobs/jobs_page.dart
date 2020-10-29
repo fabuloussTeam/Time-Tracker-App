@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timetrackerapp/app/home/jobs/add_jobs_page.dart';
+import 'package:timetrackerapp/app/home/jobs/edit_jobs_page.dart';
 import 'package:timetrackerapp/app/home/models/job.dart';
 import 'package:timetrackerapp/common_widgets/platform_alert_dialog.dart';
 import 'package:timetrackerapp/services/auth.dart';
@@ -22,7 +22,6 @@ class JobsPage extends StatelessWidget {
     }
   }
 
-
   Future<void> confirmSignOut(BuildContext context) async {
     final didRequestSignOut = await PlatformAlertDialog(
       title: "Logout",
@@ -36,10 +35,8 @@ class JobsPage extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text("Jobs"),
@@ -53,7 +50,7 @@ class JobsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => AddJobPage.show(context),
+        onPressed: () => EditJobPage.show(context),
       ),
       body: _buildcontents(context),
     );
@@ -66,7 +63,10 @@ class JobsPage extends StatelessWidget {
       builder: (context, snapshot){
         if(snapshot.hasData) {
           final jobs = snapshot.data;
-          final children = jobs.map((job) => JobListTile(job: job)).toList();
+          final children = jobs.map((job) => JobListTile(
+              job: job,
+              ontap: () => EditJobPage.show(context, job: job),
+          )).toList();
           return ListView(children: children);
         }
         if(snapshot.hasError){

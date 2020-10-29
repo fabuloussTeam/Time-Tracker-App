@@ -13,7 +13,7 @@ class JobListTile extends StatelessWidget {
     return ListTile(
       title: Text(job.name),
       trailing: Icon(Icons.chevron_right),
-      onTap: (){},
+      onTap: ontap,
     );
 
   }
